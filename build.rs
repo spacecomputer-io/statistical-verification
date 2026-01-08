@@ -56,6 +56,7 @@ fn main() {
 
         let configure_status = Command::new("./configure")
             .arg(format!("--prefix={}", testu01_root.display()))
+            .arg("--disable-shared")
             .current_dir(&testu01_dir)
             .status()
             .expect("Failed to execute configure");
@@ -91,9 +92,12 @@ fn main() {
         panic!("No lib directory found");
     }
 
-    println!("cargo:rustc-link-search=native={}", lib_dir.display());
-    println!("cargo:rustc-link-arg=-Wl,-rpath,{}", lib_dir.display());
-    println!("cargo:rustc-link-lib=testu01");
+    let lib_dir_abs = std::fs::canonicalize(&lib_dir)
+        .expect("Failed to canonicalize lib directory");
+    println!("cargo:rustc-link-search=native={}", lib_dir_abs.display());
+    println!("cargo:rustc-link-lib=static=testu01");
+    println!("cargo:rustc-link-lib=static=probdist");
+    println!("cargo:rustc-link-lib=static=mylib");
 
     let include_dir = testu01_root.join("include");
     if !include_dir.exists() {
