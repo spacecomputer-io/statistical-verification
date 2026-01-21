@@ -21,6 +21,22 @@ impl Default for Config {
     }
 }
 
+impl Config {
+    fn to_args(&self) -> Vec<String> {
+        let mut args = vec!["stdin".to_string()];
+        if self.tf != 1 {
+            args.push(format!("-tf{}", self.tf));
+        }
+        if self.te != 0 {
+            args.push(format!("-te{}", self.te));
+        }
+        if self.multithreading {
+            args.push("-multithreaded".to_string());
+        }
+        args
+    }
+}
+
 #[derive(Debug)]
 pub struct TestResult {
     pub output: String,
@@ -33,16 +49,7 @@ pub fn run_test<R: RngCore + Send + 'static>(
 ) -> std::io::Result<TestResult> {
     let rng_test_path = env!("PRACTRAND_RNG_TEST");
 
-    let mut args = vec!["stdin".to_string()];
-    if config.tf != 1 {
-        args.push(format!("-tf{}", config.tf));
-    }
-    if config.te != 0 {
-        args.push(format!("-te{}", config.te));
-    }
-    if config.multithreading {
-        args.push("-multithreaded".to_string());
-    }
+    let args = config.to_args();
 
     let mut child = Command::new(rng_test_path)
         .args(&args)
