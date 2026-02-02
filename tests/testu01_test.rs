@@ -1,8 +1,12 @@
+#![cfg(has_testu01_bindings)]
+
 use rand::rngs::OsRng;
-use testu01_runner::{bbattery_SmallCrush, register_rng, make_unif01_gen, delete_unif01_gen};
+use rng_statistical_tests::testu01::{
+    bbattery_SmallCrush, delete_unif01_gen, make_unif01_gen, register_rng,
+};
 
 #[test]
-fn test_os_rng_smallcrush() {
+fn os_rng_smallcrush() {
     let rng = OsRng;
     register_rng(rng);
 
@@ -12,3 +16,5 @@ fn test_os_rng_smallcrush() {
         delete_unif01_gen(generator);
     }
 }
+
+
