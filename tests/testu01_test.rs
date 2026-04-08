@@ -1,7 +1,7 @@
 #![cfg(has_testu01_bindings)]
 
 use rand::rngs::OsRng;
-use rng_statistical_tests::testu01::{
+use statistical_verification::testu01::{
     bbattery_SmallCrush, delete_unif01_gen, make_unif01_gen, register_rng,
 };
 
