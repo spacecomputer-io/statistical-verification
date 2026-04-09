@@ -1,7 +1,7 @@
 use rand_chacha::ChaCha20Rng;
 use rand_core::SeedableRng;
-use rng_statistical_tests::testu01::{bbattery_BigCrush, bbattery_Crush, bbattery_SmallCrush};
-use rng_statistical_tests::testu01::{delete_unif01_gen, make_unif01_gen, register_rng};
+use statistical_verification::testu01::{bbattery_BigCrush, bbattery_Crush, bbattery_SmallCrush};
+use statistical_verification::testu01::{delete_unif01_gen, make_unif01_gen, register_rng};
 
 fn main() {
     let seed = [0u8; 32];

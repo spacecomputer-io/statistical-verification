@@ -2,7 +2,7 @@
 
 use rand_chacha::ChaCha20Rng;
 use rand_core::SeedableRng;
-use rng_statistical_tests::practrand::{run_test, Config};
+use statistical_verification::practrand::{run_test, Config};
 
 #[test]
 fn practrand_smoke_test_chacha20() {

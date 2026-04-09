@@ -1,4 +1,12 @@
-# rng-statistical-tests
+# SpaceComputer | statistical-verification
+
+![spacecomputer logo](https://raw.githubusercontent.com/spacecomputer-io/media-kit/refs/heads/main/SpaceComputer/logo/SpaceComputer_banner.png)
+
+![Tests](https://github.com/spacecomputer-io/statistical-verification/actions/workflows/rust.yml/badge.svg?branch=main)
+
+This repository contains the statistical-verification project by SpaceComputer.
+
+# statistical-verification
 
 A Rust library for statistical testing of random number generators. Test any `RngCore` implementation with TestU01 (SmallCrush, Crush, BigCrush) or PractRand test suites.
 
@@ -8,7 +16,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rng-statistical-tests = { git = "https://github.com/spacecomputer-io/statistical-verification.git" }
+statistical-verification = { git = "https://github.com/spacecomputer-io/statistical-verification.git" }
 ```
 
 TestU01 and PractRand are automatically downloaded and built during compilation.
