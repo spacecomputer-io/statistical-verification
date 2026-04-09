@@ -2,6 +2,31 @@
 
 Rust library providing bindings for two statistical RNG test suites: **TestU01** and **PractRand**. Any type implementing `RngCore` can be tested.
 
+## Background
+
+Statistical test suites check if an RNG's output looks like true randomness. They run batteries of hypothesis tests, each looking for a specific pattern or correlation that a weak generator might produce. A generator that passes these suites isn't proven secure, but one that fails them is considered broken.
+
+### TestU01
+
+TestU01 is a C library by Pierre L'Ecuyer and Richard Simard (Université de Montréal, 2007). It's the most widely cited academic framework for empirical RNG testing. Three predefined batteries, in increasing order of rigor:
+
+- **SmallCrush**: 10 tests, runs in seconds. Quick sanity check.
+- **Crush**: 96 tests, ~1 hour. Catches most common generator weaknesses.
+- **BigCrush**: 106 tests, several hours. The standard academic benchmark for generator quality.
+
+Each test produces a p-value. Values outside [0.001, 0.999] are flagged suspect; values outside [1e-10, 1 - 1e-10] are outright failures. TestU01 requires a C function-pointer callback to pull random bits, which is why this crate uses FFI with a global mutex to bridge Rust's `RngCore` trait.
+
+### PractRand
+
+PractRand (Practically Random) is a C++ toolkit by Chris Doty-Humphrey. Unlike TestU01's fixed batteries, PractRand reads a byte stream from stdin and runs tests at geometrically increasing data thresholds (256KB, 512KB, 1MB, 2MB, ...). This makes it good for open-ended testing: a generator that passes at 1GB may fail at 16TB.
+
+PractRand is particularly good at catching short-range correlations and low-bit weaknesses. Key config knobs:
+
+- **-tf (folding)**: 0 = raw data only; 1 (default) = also tests a transform emphasizing low bits; 2 = wider variety of transforms.
+- **-te (expanded)**: 0 (default) = core tests, optimized for sensitivity per time; 1 = expanded set, optimized per byte consumed.
+
+Since PractRand's `RNG_test` reads from stdin, this crate just spawns it as a subprocess and pipes bytes to it. No FFI needed.
+
 ## Architecture
 
 - `src/lib.rs` — Re-exports `testu01` and `practrand` modules behind cfg flags
